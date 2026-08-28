@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "ca-phe": {
       name: "Cà phê Buôn Ma Thuột",
       price: "89.000₫",
+      priceValue: 89000,
       image: "images/caphetaynguyen.jpg",
       alt: "Cà phê Robusta Buôn Ma Thuột rang mộc",
       description: "Robusta rang mộc, vị đậm, hậu ngọt đặc trưng đất bazan.",
@@ -33,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "mat-ong": {
       name: "Mật ong rừng Tây Nguyên",
       price: "185.000₫",
+      priceValue: 185000,
       image: "images/mật ong tây nguyên.jpg",
       alt: "Mật ong rừng nguyên chất Tây Nguyên",
       description: "Khai thác từ rừng khộp tự nhiên, vị ngọt thanh, thơm dịu.",
@@ -45,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     "mac-ca": {
       name: "Mắc ca Tây Nguyên",
       price: "145.000₫",
+      priceValue: 145000,
       image: "images/mac-ca-tay-nguyen.jpg",
       alt: "Hạt mắc ca sấy Tây Nguyên",
       description:
@@ -59,11 +62,98 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var detailName = document.getElementById("detailName");
   if (detailName) {
-    var product =
-      products[new URLSearchParams(window.location.search).get("product")] ||
-      products["ca-phe"];
-    var productKey =
-      new URLSearchParams(window.location.search).get("product") || "ca-phe";
+    var productParameter = new URLSearchParams(window.location.search).get(
+      "product",
+    );
+    var cartSection = document.getElementById("cartSection");
+    var detailSection = document.getElementById("chi-tiet-san-pham");
+    var cart = JSON.parse(localStorage.getItem("dacsan-cart") || "{}");
+
+    function formatPrice(value) {
+      return value.toLocaleString("vi-VN") + "₫";
+    }
+
+    function renderCart() {
+      var cartList = document.getElementById("cartList");
+      var cartSummary = document.getElementById("cartSummary");
+      var emptyCartMessage = document.getElementById("emptyCartMessage");
+      var cartTotal = 0;
+      cartList.replaceChildren();
+
+      Object.keys(cart).forEach(function (key) {
+        var item = products[key];
+        var amount = Number(cart[key]);
+        if (!item || !Number.isFinite(amount) || amount < 1) return;
+
+        var row = document.createElement("article");
+        row.className = "cart-item";
+        row.innerHTML =
+          '<img src="' +
+          item.image +
+          '" alt="' +
+          item.alt +
+          '">' +
+          '<div class="cart-item-info"><h2>' +
+          item.name +
+          "</h2>" +
+          "<p>" +
+          formatPrice(item.priceValue) +
+          "</p></div>" +
+          '<div class="cart-item-actions"><div class="quantity-control" aria-label="Số lượng ' +
+          item.name +
+          '">' +
+          '<button class="quantity-button decrease-cart" type="button" aria-label="Bớt một sản phẩm">−</button>' +
+          '<output class="quantity-value">' +
+          amount +
+          "</output>" +
+          '<button class="quantity-button increase-cart" type="button" aria-label="Thêm một sản phẩm">+</button></div>' +
+          "<strong>" +
+          formatPrice(item.priceValue * amount) +
+          "</strong>" +
+          '<button class="remove-cart-item" type="button">Xóa</button></div>';
+        row
+          .querySelector(".decrease-cart")
+          .addEventListener("click", function () {
+            cart[key] = amount - 1;
+            if (cart[key] < 1) delete cart[key];
+            saveAndRenderCart();
+          });
+        row
+          .querySelector(".increase-cart")
+          .addEventListener("click", function () {
+            cart[key] = amount + 1;
+            saveAndRenderCart();
+          });
+        row
+          .querySelector(".remove-cart-item")
+          .addEventListener("click", function () {
+            delete cart[key];
+            saveAndRenderCart();
+          });
+        cartList.appendChild(row);
+        cartTotal += item.priceValue * amount;
+      });
+
+      var hasItems = cartList.children.length > 0;
+      emptyCartMessage.hidden = hasItems;
+      cartSummary.hidden = !hasItems;
+      document.getElementById("cartTotal").textContent = formatPrice(cartTotal);
+    }
+
+    function saveAndRenderCart() {
+      localStorage.setItem("dacsan-cart", JSON.stringify(cart));
+      updateCartCount();
+      renderCart();
+    }
+
+    if (!productParameter) {
+      detailSection.hidden = true;
+      cartSection.hidden = false;
+      renderCart();
+    }
+
+    var product = products[productParameter] || products["ca-phe"];
+    var productKey = productParameter || "ca-phe";
     document.title = product.name + " — Đặc Sản Tây Nguyên";
     document.getElementById("detailImage").src = product.image;
     document.getElementById("detailImage").alt = product.alt;
@@ -79,8 +169,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var quantity = 1;
     var quantityValue = document.getElementById("quantityValue");
     var cartStatus = document.getElementById("cartStatus");
-    var cart = JSON.parse(localStorage.getItem("dacsan-cart") || "{}");
-
     function updateQuantity(nextQuantity) {
       quantity = Math.max(1, Math.min(99, nextQuantity));
       quantityValue.textContent = quantity;

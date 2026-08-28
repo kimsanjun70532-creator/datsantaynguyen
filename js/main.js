@@ -2,6 +2,21 @@
 // Xử lý menu di động và phản hồi form liên hệ (giao diện tĩnh, không gửi server).
 
 document.addEventListener("DOMContentLoaded", function () {
+  function updateCartCount() {
+    var cartCount = document.getElementById("cartCount");
+    if (!cartCount) return;
+
+    var cart = JSON.parse(localStorage.getItem("dacsan-cart") || "{}");
+    cartCount.textContent = Object.values(cart).reduce(function (
+      total,
+      amount,
+    ) {
+      return total + amount;
+    }, 0);
+  }
+
+  updateCartCount();
+
   var products = {
     "ca-phe": {
       name: "Cà phê Buôn Ma Thuột",
@@ -93,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
         " sản phẩm. Giỏ hàng hiện có " +
         totalItems +
         " sản phẩm.";
+      updateCartCount();
       updateQuantity(1);
     });
   }

@@ -309,6 +309,15 @@ select:focus-visible {
   border-bottom: 2px solid var(--color-secondary);
 }
 
+.cart-link {
+  white-space: nowrap;
+}
+
+.cart-link span {
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
 @media (min-width: 800px) {
   .nav-toggle {
     display: none;

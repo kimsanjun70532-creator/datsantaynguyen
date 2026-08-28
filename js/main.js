@@ -2,6 +2,64 @@
 // Xử lý menu di động và phản hồi form liên hệ (giao diện tĩnh, không gửi server).
 
 document.addEventListener("DOMContentLoaded", function () {
+  var products = {
+    "ca-phe": {
+      name: "Cà phê Buôn Ma Thuột",
+      price: "89.000₫",
+      image: "images/caphetaynguyen.jpg",
+      alt: "Cà phê Robusta Buôn Ma Thuột rang mộc",
+      description: "Robusta rang mộc, vị đậm, hậu ngọt đặc trưng đất bazan.",
+      origin: "Buôn Ma Thuột, Đắk Lắk",
+      feature: "Rang mộc, hạt nguyên chất",
+      package: "500g/túi",
+      story:
+        "Cà phê được chọn từ những hạt Robusta chín đều trên vùng đất bazan Buôn Ma Thuột, rang mộc để giữ trọn hương thơm tự nhiên.",
+    },
+    "mat-ong": {
+      name: "Mật ong rừng Tây Nguyên",
+      price: "185.000₫",
+      image: "images/mật ong tây nguyên.jpg",
+      alt: "Mật ong rừng nguyên chất Tây Nguyên",
+      description: "Khai thác từ rừng khộp tự nhiên, vị ngọt thanh, thơm dịu.",
+      origin: "Đắk Lắk, Tây Nguyên",
+      feature: "Nguyên chất, không pha đường",
+      package: "500ml/chai",
+      story:
+        "Mật ong được thu hoạch theo mùa từ những đàn ong tự nhiên trong rừng khộp, lọc sạch và đóng chai tại vùng nguyên liệu.",
+    },
+    "mac-ca": {
+      name: "Mắc ca Tây Nguyên",
+      price: "145.000₫",
+      image: "images/mac-ca-tay-nguyen.jpg",
+      alt: "Hạt mắc ca sấy Tây Nguyên",
+      description:
+        "Hạt to đều, béo bùi, sấy chín tới bằng công nghệ nhiệt thấp.",
+      origin: "Đắk Nông, Tây Nguyên",
+      feature: "Sấy nhiệt thấp, giòn bùi",
+      package: "300g/túi",
+      story:
+        "Hạt mắc ca được tuyển chọn từ vụ thu hoạch mới, sấy ở nhiệt độ thấp để giữ độ béo, vị bùi và dưỡng chất tự nhiên.",
+    },
+  };
+
+  var detailName = document.getElementById("detailName");
+  if (detailName) {
+    var product =
+      products[new URLSearchParams(window.location.search).get("product")] ||
+      products["ca-phe"];
+    document.title = product.name + " — Đặc Sản Tây Nguyên";
+    document.getElementById("detailImage").src = product.image;
+    document.getElementById("detailImage").alt = product.alt;
+    detailName.textContent = product.name;
+    document.getElementById("detailPrice").textContent = product.price;
+    document.getElementById("detailDescription").textContent =
+      product.description;
+    document.getElementById("detailOrigin").textContent = product.origin;
+    document.getElementById("detailFeature").textContent = product.feature;
+    document.getElementById("detailPackage").textContent = product.package;
+    document.getElementById("detailStory").textContent = product.story;
+  }
+
   // --- Menu di động (mobile nav toggle) ---
   var navToggle = document.getElementById("navToggle");
   var mainNav = document.getElementById("main-nav");

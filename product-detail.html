@@ -74,10 +74,18 @@
               Cà phê được chọn từ những hạt Robusta chín đều trên vùng đất bazan
               Buôn Ma Thuột, rang mộc để giữ trọn hương thơm tự nhiên.
             </p>
+            <div class="quantity-control" aria-label="Chọn số lượng">
+              <span class="quantity-label">Số lượng</span>
+              <button class="quantity-button" type="button" id="decreaseQuantity" aria-label="Bớt một sản phẩm">−</button>
+              <output id="quantityValue" class="quantity-value" for="decreaseQuantity increaseQuantity">1</output>
+              <button class="quantity-button" type="button" id="increaseQuantity" aria-label="Thêm một sản phẩm">+</button>
+            </div>
             <div class="action-group">
-              <a class="btn btn-primary" href="contact.html">Đặt hàng ngay</a>
+              <button class="btn btn-primary" type="button" id="addToCart">Thêm vào giỏ hàng</button>
+              <a class="btn btn-secondary" href="contact.html">Đặt hàng ngay</a>
               <a class="btn btn-secondary" href="products.html">Xem sản phẩm khác</a>
             </div>
+            <p class="cart-status" id="cartStatus" role="status" aria-live="polite"></p>
           </div>
         </div>
       </section>

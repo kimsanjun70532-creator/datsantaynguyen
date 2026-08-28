@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var product =
       products[new URLSearchParams(window.location.search).get("product")] ||
       products["ca-phe"];
+    var productKey =
+      new URLSearchParams(window.location.search).get("product") || "ca-phe";
     document.title = product.name + " — Đặc Sản Tây Nguyên";
     document.getElementById("detailImage").src = product.image;
     document.getElementById("detailImage").alt = product.alt;
@@ -58,6 +60,41 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("detailFeature").textContent = product.feature;
     document.getElementById("detailPackage").textContent = product.package;
     document.getElementById("detailStory").textContent = product.story;
+
+    var quantity = 1;
+    var quantityValue = document.getElementById("quantityValue");
+    var cartStatus = document.getElementById("cartStatus");
+    var cart = JSON.parse(localStorage.getItem("dacsan-cart") || "{}");
+
+    function updateQuantity(nextQuantity) {
+      quantity = Math.max(1, Math.min(99, nextQuantity));
+      quantityValue.textContent = quantity;
+    }
+
+    document
+      .getElementById("decreaseQuantity")
+      .addEventListener("click", function () {
+        updateQuantity(quantity - 1);
+      });
+    document
+      .getElementById("increaseQuantity")
+      .addEventListener("click", function () {
+        updateQuantity(quantity + 1);
+      });
+    document.getElementById("addToCart").addEventListener("click", function () {
+      cart[productKey] = (cart[productKey] || 0) + quantity;
+      localStorage.setItem("dacsan-cart", JSON.stringify(cart));
+      var totalItems = Object.values(cart).reduce(function (total, amount) {
+        return total + amount;
+      }, 0);
+      cartStatus.textContent =
+        "Đã thêm " +
+        quantity +
+        " sản phẩm. Giỏ hàng hiện có " +
+        totalItems +
+        " sản phẩm.";
+      updateQuantity(1);
+    });
   }
 
   // --- Menu di động (mobile nav toggle) ---

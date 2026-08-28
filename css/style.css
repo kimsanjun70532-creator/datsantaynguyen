@@ -655,6 +655,53 @@ select:focus-visible {
   margin-top: var(--space-lg);
 }
 
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+.quantity-label {
+  font-weight: 600;
+  margin-right: var(--space-sm);
+}
+
+.quantity-button,
+.quantity-value {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 1.2rem;
+}
+
+.quantity-button {
+  cursor: pointer;
+  border-radius: var(--radius-md);
+}
+
+.quantity-button:hover,
+.quantity-button:focus-visible {
+  background: var(--color-background);
+  border-color: var(--color-primary);
+}
+
+.quantity-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cart-status {
+  min-height: 1.5em;
+  margin-top: var(--space-md);
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
 .related-grid {
   display: grid;
   gap: var(--space-lg);
